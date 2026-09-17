@@ -1367,52 +1367,449 @@ function showPage(id, button) {
 
 function speak(text) {
 
+   /* =====================================================
+   HỆ THỐNG PHÁT ÂM PINYIN TIẾNG TRUNG
+   KHÔNG ĐỌC TÊN CHỮ CÁI TIẾNG ANH
+===================================================== */
+
+const PINYIN_AUDIO = {
+
+    /* Thanh mẫu */
+
+    "b": "波",
+    "p": "坡",
+    "m": "摸",
+    "f": "佛",
+
+    "d": "得",
+    "t": "特",
+    "n": "呢",
+    "l": "了",
+
+    "g": "哥",
+    "k": "科",
+    "h": "喝",
+
+    "j": "鸡",
+    "q": "七",
+    "x": "西",
+
+    "zh": "知",
+    "ch": "吃",
+    "sh": "诗",
+    "r": "日",
+
+    "z": "资",
+    "c": "次",
+    "s": "思",
+
+    /* Vận mẫu */
+
+    "a": "啊",
+    "o": "哦",
+    "e": "额",
+    "i": "衣",
+    "u": "乌",
+    "ü": "鱼",
+
+    "ai": "爱",
+    "ei": "诶",
+    "ao": "奥",
+    "ou": "欧",
+
+    "an": "安",
+    "en": "恩",
+    "ang": "昂",
+    "eng": "鞥",
+    "ong": "翁",
+
+    "ia": "呀",
+    "ie": "耶",
+    "iao": "腰",
+    "iu": "优",
+
+    "ian": "烟",
+    "in": "音",
+    "iang": "央",
+    "ing": "英",
+    "iong": "拥",
+
+    "ua": "哇",
+    "uo": "窝",
+    "uai": "歪",
+    "ui": "威",
+
+    "uan": "弯",
+    "un": "温",
+    "uang": "汪",
+    "ueng": "翁",
+
+    "üe": "约",
+    "üan": "冤",
+    "ün": "晕",
+
+    "er": "儿"
+};
+
+
+/*
+    Voice tiếng Trung
+*/
+
+function getChineseVoice() {
+
+    const voices =
+        window.speechSynthesis.getVoices();
+
+    /*
+        Ưu tiên zh-CN
+    */
+
+    let voice =
+        voices.find(v =>
+            v.lang &&
+            v.lang.toLowerCase() === "zh-cn"
+        );
+
+    if (voice) return voice;
+
+
+    /*
+        Sau đó tìm các voice
+        Mandarin / Chinese
+    */
+
+    voice =
+        voices.find(v =>
+            v.lang &&
+            (
+                v.lang.toLowerCase().startsWith("zh-cn") ||
+                v.lang.toLowerCase().startsWith("zh")
+            )
+        );
+
+    return voice || null;
+}
+
+
+/*
+    Đọc Pinyin
+*/
+
+function speakPinyin(pinyin) {
+
     if (!("speechSynthesis" in window)) {
 
         alert(
-            "Trình duyệt không hỗ trợ phát âm. " +
-            "Hãy sử dụng Google Chrome hoặc Microsoft Edge."
+            "Trình duyệt không hỗ trợ phát âm."
         );
 
         return;
     }
 
+
     window.speechSynthesis.cancel();
+
+
+    let text =
+        String(pinyin)
+        .trim()
+        .toLowerCase();
+
+
+    /*
+        Nếu là câu / từ tiếng Trung
+        có sẵn chữ Hán thì đọc trực tiếp.
+    */
+
+    const chineseChars =
+        /[\u4e00-\u9fff]/;
+
+
+    if (chineseChars.test(text)) {
+
+        speakChinese(text);
+
+        return;
+    }
+
+
+    /*
+        Nếu là thanh mẫu
+        KHÔNG đọc b như chữ "bi".
+        
+        b → 波
+        p → 坡
+        m → 摸
+        ...
+    */
+
+    if (PINYIN_AUDIO[text]) {
+
+        speakChinese(
+            PINYIN_AUDIO[text]
+        );
+
+        return;
+    }
+
+
+    /*
+        Nếu là Pinyin ghép
+        ví dụ:
+
+        hua
+        gua
+        kua
+        zhu
+        chu
+        shua
+
+        Không đọc từng chữ cái.
+        Chuyển sang âm tiết tiếng Trung.
+    */
+
+    const chinese =
+        pinyinToChinese(text);
+
+
+    if (chinese) {
+
+        speakChinese(chinese);
+
+        return;
+    }
+
+
+    /*
+        Nếu không xác định được
+        thì không đọc bằng voice tiếng Anh.
+    */
+
+    console.warn(
+        "Không tìm được cách phát âm Pinyin:",
+        pinyin
+    );
+
+}
+
+
+/*
+    Phát âm bằng voice Trung Quốc
+*/
+
+function speakChinese(text) {
+
+    window.speechSynthesis.cancel();
+
 
     const utterance =
         new SpeechSynthesisUtterance(text);
 
+
     utterance.lang = "zh-CN";
 
-    utterance.rate = 0.75;
+
+    const voice =
+        getChineseVoice();
+
+
+    if (voice) {
+
+        utterance.voice =
+            voice;
+
+    }
+
+
+    /*
+        Pinyin học phát âm
+        nên đọc chậm hơn bình thường.
+    */
+
+    utterance.rate = 0.65;
 
     utterance.pitch = 1;
 
-    /*
-       Một số máy có nhiều voice.
-       Ưu tiên voice tiếng Trung.
-    */
+    utterance.volume = 1;
 
-    const voices =
-        speechSynthesis.getVoices();
 
-    const chineseVoice =
-        voices.find(v =>
-            v.lang &&
-            (
-                v.lang.toLowerCase() === "zh-cn" ||
-                v.lang.toLowerCase() === "zh"
-            )
-        );
-
-    if (chineseVoice) {
-        utterance.voice = chineseVoice;
-    }
-
-    speechSynthesis.speak(utterance);
+    window.speechSynthesis.speak(
+        utterance
+    );
 }
 
 
+/*
+    Chuyển Pinyin → chữ Hán
+    để trình duyệt đọc tiếng Trung
+*/
+
+function pinyinToChinese(pinyin) {
+
+    const map = {
+
+        "ba": "八",
+        "pa": "爬",
+        "ma": "妈",
+        "fa": "发",
+
+        "da": "搭",
+        "ta": "他",
+        "na": "拿",
+        "la": "拉",
+
+        "ga": "嘎",
+        "ka": "卡",
+        "ha": "哈",
+
+        "ji": "鸡",
+        "qi": "七",
+        "xi": "西",
+
+        "zhi": "知",
+        "chi": "吃",
+        "shi": "诗",
+        "ri": "日",
+
+        "zi": "资",
+        "ci": "次",
+        "si": "思",
+
+        /*
+            ua
+        */
+
+        "gua": "瓜",
+        "kua": "夸",
+        "hua": "花",
+
+        /*
+            uo
+        */
+
+        "duo": "多",
+        "tuo": "拖",
+        "nuo": "诺",
+        "luo": "罗",
+
+        "guo": "国",
+        "kuo": "扩",
+        "huo": "火",
+
+        "zhuo": "桌",
+        "chuo": "戳",
+        "shuo": "说",
+
+        /*
+            uai
+        */
+
+        "guai": "乖",
+        "kuai": "快",
+        "huai": "坏",
+
+        "zhuai": "拽",
+        "chuai": "踹",
+        "shuai": "帅",
+
+        /*
+            uan
+        */
+
+        "duan": "端",
+        "tuan": "团",
+        "nuan": "暖",
+        "luan": "乱",
+
+        "guan": "关",
+        "kuan": "宽",
+        "huan": "欢",
+
+        "zhuan": "专",
+        "chuan": "穿",
+        "shuan": "栓",
+
+        /*
+            uang
+        */
+
+        "guang": "光",
+        "kuang": "框",
+        "huang": "黄",
+
+        /*
+            ia
+        */
+
+        "jia": "家",
+        "qia": "掐",
+        "xia": "下",
+
+        /*
+            ie
+        */
+
+        "jie": "街",
+        "qie": "切",
+        "xie": "写",
+
+        /*
+            iao
+        */
+
+        "jiao": "教",
+        "qiao": "桥",
+        "xiao": "小",
+
+        /*
+            ian
+        */
+
+        "jian": "见",
+        "qian": "钱",
+        "xian": "先",
+
+        /*
+            iang
+        */
+
+        "jiang": "江",
+        "qiang": "强",
+        "xiang": "想",
+
+        /*
+            ing
+        */
+
+        "jing": "京",
+        "qing": "清",
+        "xing": "星",
+
+        /*
+            iong
+        */
+
+        "jiong": "窘",
+        "qiong": "穷",
+        "xiong": "熊"
+    };
+
+
+    return map[pinyin] || null;
+}
+
+
+/*
+    Giữ hàm speak() cũ để
+    các nút trong HTML không phải sửa hết.
+*/
+
+function speak(text) {
+
+    speakPinyin(text);
+
+}
 /* =====================================================
    BẢNG THANH MẪU
 ===================================================== */
