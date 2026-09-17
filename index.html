@@ -3,479 +3,2421 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Học Tiếng Trung — Hoàn Chỉnh</title>
+<title>Pinyin Master - Học và Luyện Phát Âm Tiếng Trung</title>
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
-  body {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-    background: linear-gradient(135deg, #eef2f7, #d9e2ec);
-    min-height: 100vh;
-  }
-  h1 {
-    text-align: center;
-    color: #2d3748;
-    margin: 20px 0 30px;
-    font-size: 26px;
-  }
-  .card {
-    background: white;
-    border-radius: 20px;
-    padding: 30px 25px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-  }
-  .hanzi-main {
-    font-size: 72px;
-    text-align: center;
-    color: #c53030;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  .pinyin-main {
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+    --purple: #7c3aed;
+    --green: #16a34a;
+    --red: #dc2626;
+    --orange: #ea580c;
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #172033;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Arial,
+        "Segoe UI",
+        sans-serif;
+}
+
+button {
+    font-family: inherit;
+}
+
+.header {
+    background: linear-gradient(
+        135deg,
+        #312e81,
+        #4f46e5,
+        #7c3aed
+    );
+    color: white;
+    padding: 25px 20px;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.logo {
     font-size: 30px;
-    text-align: center;
-    color: #2b6cb0;
-    margin-bottom: 12px;
-    font-weight: 600;
-  }
-  .meaning-main {
-    font-size: 20px;
-    text-align: center;
-    color: #4a5568;
-    margin-bottom: 25px;
-  }
-  .section-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #2d3748;
-    margin: 20px 0 12px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #e2e8f0;
-  }
-  .char-detail {
+    font-weight: 800;
+}
+
+.subtitle {
+    margin-top: 6px;
+    opacity: .85;
+}
+
+.nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 15px;
-  }
-  .char-box {
-    flex: 1;
-    min-width: 120px;
-    text-align: center;
-    padding: 15px;
-    background: #f7fafc;
-    border-radius: 12px;
-  }
-  .char-single {
-    font-size: 36px;
-    color: #c53030;
-    margin-bottom: 8px;
-  }
-  .char-info {
-    font-size: 14px;
-    color: #4a5568;
-    line-height: 1.7;
-  }
-  .stroke-box {
-    background: #fef5e7;
-    padding: 15px;
-    border-radius: 12px;
-    margin: 10px 0;
-  }
-  .stroke-title {
-    font-weight: 600;
-    color: #b45309;
-    margin-bottom: 8px;
-  }
-  .stroke-desc {
-    color: #78350f;
-    line-height: 1.8;
-  }
-  .vocab-list {
-    list-style: none;
-    margin-top: 10px;
-  }
-  .vocab-item {
-    padding: 12px 10px;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .vocab-hanzi {
-    font-size: 24px;
-    color: #c53030;
-    min-width: 60px;
-  }
-  .vocab-pinyin {
-    color: #2b6cb0;
-    font-size: 15px;
-    min-width: 100px;
-  }
-  .vocab-meaning {
-    color: #4a5568;
-    font-size: 15px;
-    flex: 1;
-  }
-  .btn-wrap {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 20px 0;
-  }
-  button {
-    padding: 14px 28px;
-    font-size: 17px;
-    border: none;
-    border-radius: 12px;
+    gap: 8px;
+    margin-top: 22px;
+}
+
+.nav button {
+    border: 0;
+    padding: 10px 15px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.25s ease;
+    background: rgba(255,255,255,.15);
+    color: white;
     font-weight: 600;
-  }
-  .btn-listen { background: #3182ce; color: white; }
-  .btn-listen:hover { background: #2b6cb0; transform: translateY(-2px); }
-  .btn-speak { background: #38a169; color: white; }
-  .btn-speak:hover { background: #2f855a; transform: translateY(-2px); }
-  .btn-speak:disabled { background: #cbd5e0; cursor: not-allowed; transform: none; }
-  .status { text-align: center; margin-top: 10px; color: #718096; font-size: 15px; }
-  .result {
-    margin-top: 20px;
-    padding: 18px;
-    border-radius: 14px;
-    text-align: center;
-    font-size: 32px;
-    font-weight: bold;
+}
+
+.nav button:hover,
+.nav button.active {
+    background: white;
+    color: var(--primary-dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px 15px 60px;
+}
+
+.page {
     display: none;
-    animation: pop 0.3s ease;
-  }
-  .result.correct { background: #f0fff4; color: #22543d; display: block; }
-  .result.wrong { background: #fed7d7; color: #742a2a; display: block; }
-  @keyframes pop {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .nav {
+}
+
+.page.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 30px rgba(15,23,42,.06);
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+}
+
+.pinyin-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 17px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.pinyin-card:hover {
+    transform: translateY(-3px);
+    border-color: #a5b4fc;
+    box-shadow: 0 8px 20px rgba(79,70,229,.12);
+}
+
+.big-pinyin {
+    color: var(--primary-dark);
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.card-title {
+    font-weight: 700;
+    margin-top: 7px;
+}
+
+.card-desc {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 6px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-light {
+    background: #eef2ff;
+    color: var(--primary-dark);
+}
+
+.btn-green {
+    background: var(--green);
+    color: white;
+}
+
+.btn-red {
+    background: var(--red);
+    color: white;
+}
+
+.tabs {
     display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  .nav button {
-    background: #e2e8f0;
-    color: #2d3748;
-    padding: 10px 20px;
-    font-size: 15px;
-  }
-  .nav button:hover { background: #cbd5e0; }
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0;
+}
+
+.tabs button {
+    border: 1px solid var(--border);
+    background: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.tabs button.active {
+    background: var(--primary);
+    color: white;
+}
+
+.combo-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+.table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.combo-table th,
+.combo-table td {
+    border: 1px solid var(--border);
+    padding: 9px;
+    text-align: center;
+}
+
+.combo-table th {
+    background: #f1f5f9;
+}
+
+.combo-table td {
+    cursor: pointer;
+}
+
+.combo-table td:hover {
+    background: #eef2ff;
+    color: var(--primary-dark);
+    font-weight: bold;
+}
+
+.lesson {
+    display: none;
+}
+
+.lesson.active {
+    display: block;
+}
+
+.mouth-box {
+    background: #f8fafc;
+    border-radius: 16px;
+    text-align: center;
+    padding: 30px;
+    font-size: 70px;
+    margin: 15px 0;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin-top: 15px;
+}
+
+.video-container iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 15px;
+}
+
+.practice {
+    text-align: center;
+}
+
+.target {
+    font-size: 75px;
+    font-weight: 900;
+    color: var(--primary-dark);
+    margin: 20px 0 5px;
+}
+
+.target-meaning {
+    color: var(--muted);
+    margin-bottom: 15px;
+}
+
+.mic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary);
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(79,70,229,.3);
+}
+
+.mic:hover {
+    transform: scale(1.05);
+}
+
+.mic.recording {
+    background: var(--red);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    50% {
+        box-shadow:
+            0 0 0 15px rgba(220,38,38,.15);
+    }
+}
+
+.practice-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.score-box {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+.score-number {
+    font-size: 27px;
+    font-weight: 800;
+    margin-top: 5px;
+}
+
+.total-score {
+    color: var(--primary);
+}
+
+.feedback {
+    margin-top: 18px;
+    background: #eef2ff;
+    padding: 16px;
+    border-radius: 12px;
+    line-height: 1.7;
+}
+
+select,
+input {
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: white;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+    gap: 15px;
+}
+
+.stat {
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 14px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.progress-bar {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(
+        90deg,
+        #4f46e5,
+        #a855f7
+    );
+}
+
+.small {
+    font-size: 13px;
+}
+
+.good {
+    color: var(--green);
+}
+
+.bad {
+    color: var(--red);
+}
+
+@media(max-width:700px) {
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .result-grid,
+    .stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .target {
+        font-size: 58px;
+    }
+
+    .mouth-box {
+        font-size: 50px;
+    }
+}
 </style>
 </head>
+
 <body>
 
-<h1>🎓 Học Tiếng Trung — Toàn Diện</h1>
+<header class="header">
 
-<!-- === THÔNG TIN CHÍNH === -->
-<div class="card">
-  <div class="hanzi-main" id="hanzi">你好</div>
-  <div class="pinyin-main" id="pinyin">nǐ hǎo</div>
-  <div class="meaning-main" id="meaning">Xin chào</div>
+<div class="header-inner">
 
-  <div class="btn-wrap">
-    <button class="btn-listen" id="btnListen">🔊 Nghe chuẩn</button>
-    <button class="btn-speak" id="btnSpeak">🎙 Nói ngay</button>
-  </div>
-
-  <div class="status" id="status">Sẵn sàng — Nhấn "Nói ngay" để bắt đầu</div>
-  <div class="result" id="result"></div>
+<div class="logo">
+🇨🇳 Pinyin Master
 </div>
 
-<!-- === CHI TIẾT CHỮ VIẾT === -->
-<div class="card">
-  <div class="section-title">✍️ Chi tiết chữ viết</div>
-  <div id="charDetailArea"></div>
+<div class="subtitle">
+Học Pinyin · Nghe phát âm · Khẩu hình · Luyện nói · Chấm điểm
 </div>
 
-<!-- === TỪ VỰNG LIÊN QUAN === -->
-<div class="card">
-  <div class="section-title">📚 Từ vựng liên quan</div>
-  <ul class="vocab-list" id="vocabArea"></ul>
-</div>
-
-<!-- === ĐIỀU HƯỚNG === -->
 <div class="nav">
-  <button id="btnPrev">← Bài trước</button>
-  <button id="btnNext">Bài sau →</button>
+
+<button class="active"
+onclick="showPage('home',this)">
+Tổng quan
+</button>
+
+<button
+onclick="showPage('table',this)">
+Bảng Pinyin
+</button>
+
+<button
+onclick="showPage('mouth',this)">
+Khẩu hình
+</button>
+
+<button
+onclick="showPage('practice',this)">
+🎙️ Luyện phát âm
+</button>
+
+<button
+onclick="showPage('progress',this)">
+📊 Tiến độ
+</button>
+
 </div>
+
+</div>
+
+</header>
+
+
+<main class="container">
+
+
+<!-- ================= HOME ================= -->
+
+<section id="home" class="page active">
+
+<div class="card">
+
+<h2>
+🇨🇳 Học toàn bộ Pinyin tiếng Trung
+</h2>
+
+<p class="muted">
+Hệ thống học từ thanh mẫu, vận mẫu, thanh điệu,
+cách đặt lưỡi, khẩu hình và luyện phát âm bằng microphone.
+</p>
+
+<div class="stats">
+
+<div class="stat">
+<div>Thanh mẫu</div>
+<div class="stat-value">21</div>
+</div>
+
+<div class="stat">
+<div>Vận mẫu</div>
+<div class="stat-value">35+</div>
+</div>
+
+<div class="stat">
+<div>Thanh điệu</div>
+<div class="stat-value">5</div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Lộ trình học</h2>
+
+<div class="grid">
+
+<div
+class="pinyin-card"
+onclick="openLesson(0)">
+
+<div class="big-pinyin">
+①
+</div>
+
+<div class="card-title">
+Thanh mẫu
+</div>
+
+<div class="card-desc">
+b p m f · d t n l ·
+g k h · j q x · zh ch sh r · z c s
+</div>
+
+</div>
+
+
+<div
+class="pinyin-card"
+onclick="openLesson(1)">
+
+<div class="big-pinyin">
+②
+</div>
+
+<div class="card-title">
+Vận mẫu
+</div>
+
+<div class="card-desc">
+a o e i u ü · ai ei ao ou ·
+an en ang eng ong...
+</div>
+
+</div>
+
+
+<div
+class="pinyin-card"
+onclick="openLesson(2)">
+
+<div class="big-pinyin">
+③
+</div>
+
+<div class="card-title">
+Thanh điệu
+</div>
+
+<div class="card-desc">
+ā · á · ǎ · à · a
+</div>
+
+</div>
+
+
+<div
+class="pinyin-card"
+onclick="showPage('practice')">
+
+<div class="big-pinyin">
+④
+</div>
+
+<div class="card-title">
+Luyện nói
+</div>
+
+<div class="card-desc">
+🎙️ Đọc Pinyin và nhận điểm
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= TABLE ================= -->
+
+<section id="table" class="page">
+
+<div class="card">
+
+<h2>Bảng Pinyin đầy đủ</h2>
+
+<p class="muted">
+Bấm vào từng âm để nghe phát âm tiếng Trung phổ thông.
+</p>
+
+<div class="tabs">
+
+<button
+class="active"
+onclick="renderInitials(this)">
+Thanh mẫu
+</button>
+
+<button
+onclick="renderFinals(this)">
+Vận mẫu
+</button>
+
+<button
+onclick="renderTones(this)">
+Thanh điệu
+</button>
+
+<button
+onclick="renderCombination(this)">
+Bảng ghép
+</button>
+
+</div>
+
+<div id="pinyinTable"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= MOUTH ================= -->
+
+<section id="mouth" class="page">
+
+<div class="card">
+
+<h2>
+👅 Khẩu hình và vị trí đặt lưỡi
+</h2>
+
+<div class="tabs">
+
+<button
+class="active"
+onclick="lesson(0,this)">
+Thanh mẫu
+</button>
+
+<button
+onclick="lesson(1,this)">
+Vận mẫu
+</button>
+
+<button
+onclick="lesson(2,this)">
+Thanh điệu
+</button>
+
+<button
+onclick="lesson(3,this)">
+Âm khó
+</button>
+
+<button
+onclick="lesson(4,this)">
+Video
+</button>
+
+</div>
+
+
+<div id="lesson0" class="lesson active">
+
+<h3>b / p / m / f</h3>
+
+<div class="mouth-box">
+👄
+</div>
+
+<p>
+<b>b:</b>
+hai môi khép lại rồi mở ra, không bật hơi mạnh.
+</p>
+
+<p>
+<b>p:</b>
+hai môi giống b nhưng bật hơi rõ.
+</p>
+
+<p>
+<b>m:</b>
+hai môi khép, âm đi qua mũi.
+</p>
+
+<p>
+<b>f:</b>
+răng trên chạm nhẹ môi dưới.
+</p>
+
+<button
+class="btn btn-primary"
+onclick="speak('b p m f')">
+🔊 Nghe nhóm âm
+</button>
+
+<hr>
+
+<h3>d / t / n / l</h3>
+
+<p>
+Đầu lưỡi chạm hoặc tiến gần vùng lợi phía sau răng trên.
+</p>
+
+<button
+class="btn btn-primary"
+onclick="speak('d t n l')">
+🔊 Nghe
+</button>
+
+<hr>
+
+<h3>g / k / h</h3>
+
+<p>
+Âm được tạo ở phía sau khoang miệng, gần gốc lưỡi.
+</p>
+
+<button
+class="btn btn-primary"
+onclick="speak('g k h')">
+🔊 Nghe
+</button>
+
+</div>
+
+
+<div id="lesson1" class="lesson">
+
+<h3>Vận mẫu đơn</h3>
+
+<div class="grid">
+
+<div class="pinyin-card"
+onclick="speak('a')">
+
+<div class="big-pinyin">a</div>
+
+<div class="card-desc">
+Miệng mở tương đối rộng.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('o')">
+
+<div class="big-pinyin">o</div>
+
+<div class="card-desc">
+Môi tròn.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('e')">
+
+<div class="big-pinyin">e</div>
+
+<div class="card-desc">
+Miệng mở vừa, lưỡi ở phía sau.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('i')">
+
+<div class="big-pinyin">i</div>
+
+<div class="card-desc">
+Môi kéo ngang.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('u')">
+
+<div class="big-pinyin">u</div>
+
+<div class="card-desc">
+Môi tròn và đưa về phía trước.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('ü')">
+
+<div class="big-pinyin">ü</div>
+
+<div class="card-desc">
+Lưỡi gần vị trí i, môi tròn như u.
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<h3>Vận mẫu ghép</h3>
+
+<p>
+Khi đọc ai, ei, ao, ou..., khẩu hình
+chuyển liên tục từ âm đầu sang âm cuối.
+</p>
+
+<button
+class="btn btn-primary"
+onclick="speak('ai ei ao ou')">
+🔊 Nghe
+</button>
+
+</div>
+
+
+<div id="lesson2" class="lesson">
+
+<h3>4 thanh điệu + thanh nhẹ</h3>
+
+<div class="grid">
+
+<div class="pinyin-card"
+onclick="speak('mā')">
+
+<div class="big-pinyin">mā</div>
+<b>Thanh 1</b>
+
+<div class="card-desc">
+Cao và ngang.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('má')">
+
+<div class="big-pinyin">má</div>
+<b>Thanh 2</b>
+
+<div class="card-desc">
+Từ thấp/trung lên cao.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('mǎ')">
+
+<div class="big-pinyin">mǎ</div>
+<b>Thanh 3</b>
+
+<div class="card-desc">
+Hạ xuống rồi đi lên.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('mà')">
+
+<div class="big-pinyin">mà</div>
+<b>Thanh 4</b>
+
+<div class="card-desc">
+Rơi mạnh từ cao xuống thấp.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('ma')">
+
+<div class="big-pinyin">ma</div>
+<b>Thanh nhẹ</b>
+
+<div class="card-desc">
+Ngắn, nhẹ, không nhấn.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="lesson3" class="lesson">
+
+<h3>⚠️ Các âm người Việt thường dễ nhầm</h3>
+
+<div class="grid">
+
+<div class="pinyin-card"
+onclick="speak('j q x')">
+
+<div class="big-pinyin">
+j q x
+</div>
+
+<div class="card-desc">
+Mặt lưỡi. Không cuộn lưỡi.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('zh ch sh r')">
+
+<div class="big-pinyin">
+zh ch sh r
+</div>
+
+<div class="card-desc">
+Đầu lưỡi hơi cuộn.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('z c s')">
+
+<div class="big-pinyin">
+z c s
+</div>
+
+<div class="card-desc">
+Đầu lưỡi gần răng, không cuộn.
+</div>
+
+</div>
+
+<div class="pinyin-card"
+onclick="speak('ü')">
+
+<div class="big-pinyin">
+ü
+</div>
+
+<div class="card-desc">
+Lưỡi gần vị trí i nhưng môi tròn.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="lesson4" class="lesson">
+
+<h3>🎬 Video hướng dẫn</h3>
+
+<p class="muted">
+Bạn có thể thay URL bên dưới bằng video Pinyin
+mà bạn muốn sử dụng.
+</p>
+
+<div class="video-container">
+
+<iframe
+src="https://www.youtube.com/embed/4QJ2uP8k0oA"
+allowfullscreen>
+</iframe>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= PRACTICE ================= -->
+
+<section id="practice" class="page">
+
+<div class="card practice">
+
+<h2>🎙️ Luyện phát âm và chấm điểm</h2>
+
+<p class="muted">
+Dùng Chrome hoặc Edge. Khi được hỏi, hãy cho phép
+website sử dụng microphone.
+</p>
+
+
+<div class="filters">
+
+<select id="practiceMode"
+onchange="newQuestion()">
+
+<option value="syllable">
+Pinyin cơ bản
+</option>
+
+<option value="tone">
+Luyện thanh điệu
+</option>
+
+<option value="hard">
+Âm khó
+</option>
+
+<option value="word">
+Từ mẫu
+</option>
+
+</select>
+
+<button
+class="btn btn-light"
+onclick="newQuestion()">
+🔄 Câu mới
+</button>
+
+</div>
+
+
+<div class="target"
+id="target">
+mǎ
+</div>
+
+<div
+class="target-meaning"
+id="meaning">
+ngựa
+</div>
+
+
+<div class="practice-controls">
+
+<button
+class="btn btn-light"
+onclick="speak(currentTarget)">
+🔊 Nghe mẫu
+</button>
+
+<button
+id="micButton"
+class="mic"
+onclick="toggleMicrophone()">
+🎙️
+</button>
+
+</div>
+
+
+<div id="status" class="muted">
+Bấm microphone rồi đọc Pinyin trên màn hình.
+</div>
+
+
+<div class="result-grid">
+
+<div class="score-box">
+
+Âm đầu
+
+<div
+class="score-number"
+id="initialScore">
+—
+</div>
+
+</div>
+
+
+<div class="score-box">
+
+Vận mẫu
+
+<div
+class="score-number"
+id="finalScore">
+—
+</div>
+
+</div>
+
+
+<div class="score-box">
+
+Thanh điệu
+
+<div
+class="score-number"
+id="toneScore">
+—
+</div>
+
+</div>
+
+
+<div class="score-box">
+
+TỔNG
+
+<div
+class="score-number total-score"
+id="totalScore">
+—
+</div>
+
+</div>
+
+</div>
+
+
+<div
+id="feedback"
+class="feedback">
+
+Kết quả phát âm sẽ hiển thị ở đây.
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= PROGRESS ================= -->
+
+<section id="progress" class="page">
+
+<div class="card">
+
+<h2>📊 Tiến độ luyện phát âm</h2>
+
+<div class="stats">
+
+<div class="stat">
+
+<div>Số lần luyện</div>
+
+<div
+class="stat-value"
+id="attempts">
+0
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div>Điểm trung bình</div>
+
+<div
+class="stat-value"
+id="average">
+0
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div>Điểm cao nhất</div>
+
+<div
+class="stat-value"
+id="best">
+0
+</div>
+
+</div>
+
+</div>
+
+
+<h3>Tiến độ</h3>
+
+<div class="progress-bar">
+
+<div
+class="progress-fill"
+id="progressFill">
+</div>
+
+</div>
+
+<p
+id="progressText"
+class="muted">
+</p>
+
+
+<button
+class="btn btn-red"
+onclick="resetProgress()">
+Xóa tiến độ
+</button>
+
+</div>
+
+</section>
+
+</main>
+
 
 <script>
-// ==============================================
-// DỮ LIỆU BÀI HỌC — THÊM BÀI MỚI Ở ĐÂY
-// ==============================================
-const lessons = [
-  {
-    hanzi: "你好",
-    pinyin: "ni3 hao3",
-    meaning: "Xin chào",
-    characters: [
-      { char: "你", pinyin: "ni3", meaning: "Bạn", strokes: 7, radical: "Nhân 亻", strokeOrder: "1.Ngang 2.Đứng 3.Ngang 4.Nét xiên phải 5.Ngang 6.Nét cong 7.Nét móc" },
-      { char: "好", pinyin: "hao3", meaning: "Tốt/Được", strokes: 6, radical: "Nữ 女", strokeOrder: "Nữ: 1.Ngang 2.Nét xiên 3.Ngang → Tử: 1.Nét cong 2.Nét móc 3.Ngang" }
-    ],
-    relatedVocab: [
-      { hanzi: "你们", pinyin: "ni3 men5", meaning: "Các bạn" },
-      { hanzi: "好人", pinyin: "hao3 ren2", meaning: "Người tốt" },
-      { hanzi: "很好", pinyin: "hen3 hao3", meaning: "Rất tốt" }
-    ]
-  },
-  {
-    hanzi: "谢谢",
-    pinyin: "xie4 xie",
-    meaning: "Cảm ơn",
-    characters: [
-      { char: "谢", pinyin: "xie4", meaning: "Cảm ơn", strokes: 12, radical: "Ngôn 讠", strokeOrder: "Trái: Ngôn 2 nét → Phải: Thân 10 nét" }
-    ],
-    relatedVocab: [
-      { hanzi: "感谢", pinyin: "gan3 xie4", meaning: "Cảm tạ" },
-      { hanzi: "多谢", pinyin: "duo1 xie4", meaning: "Cảm ơn nhiều" },
-      { hanzi: "谢谢了", pinyin: "xie4 xie le", meaning: "Cảm ơn nhé" }
-    ]
-  },
-  {
-    hanzi: "再见",
-    pinyin: "zai4 jian4",
-    meaning: "Tạm biệt",
-    characters: [
-      { char: "再", pinyin: "zai4", meaning: "Lại/Tiếp tục", strokes: 6, radical: "Mãi 冂", strokeOrder: "1.Ngang 2.Nét xiên 3.Nét cong 4.Ngang 5.Nét cong 6.Ngang" },
-      { char: "见", pinyin: "jian4", meaning: "Thấy/Gặp", strokes: 4, radical: "Kiến 见", strokeOrder: "1.Nét đứng 2.Nét cong 3.Ngang 4.Nét móc cong" }
-    ],
-    relatedVocab: [
-      { hanzi: "明天见", pinyin: "ming2 tian1 jian4", meaning: "Hẹn gặp mai" },
-      { hanzi: "下次见", pinyin: "xia4 ci4 jian4", meaning: "Hẹn gặp lần sau" },
-      { hanzi: "再见了", pinyin: "zai4 jian4 le", meaning: "Tạm biệt nhé" }
-    ]
-  },
-  {
-    hanzi: "学习",
-    pinyin: "xue2 xi2",
-    meaning: "Học tập",
-    characters: [
-      { char: "学", pinyin: "xue2", meaning: "Học", strokes: 8, radical: "Tử 子", strokeOrder: "Phần trên 5 nét → Tử: 3 nét" },
-      { char: "习", pinyin: "xi2", meaning: "Luyện tập", strokes: 3, radical: "Vũ 羽", strokeOrder: "1.Nét xiên 2.Nét cong 3.Nét móc" }
-    ],
-    relatedVocab: [
-      { hanzi: "学生", pinyin: "xue2 sheng1", meaning: "Học sinh" },
-      { hanzi: "学校", pinyin: "xue2 xiao4", meaning: "Trường học" },
-      { hanzi: "练习", pinyin: "lian4 xi2", meaning: "Luyện tập" }
-    ]
-  }
+
+/* =====================================================
+   DỮ LIỆU PINYIN
+===================================================== */
+
+const initials = [
+    "b","p","m","f",
+    "d","t","n","l",
+    "g","k","h",
+    "j","q","x",
+    "zh","ch","sh","r",
+    "z","c","s"
 ];
 
-let currentIndex = 0;
-let isRecording = false;
+const finals = [
+    "a","o","e","i","u","ü",
+    "ai","ei","ao","ou",
+    "an","en","ang","eng","ong",
+    "ia","ie","iao","iu",
+    "ian","in","iang","ing","iong",
+    "ua","uo","uai","ui",
+    "uan","un","uang","ueng",
+    "üe","üan","ün",
+    "er"
+];
+
+const tones = [
+    ["ā","Thanh 1"],
+    ["á","Thanh 2"],
+    ["ǎ","Thanh 3"],
+    ["à","Thanh 4"],
+    ["a","Thanh nhẹ"]
+];
+
+const hardSounds = [
+    "j","q","x",
+    "zh","ch","sh","r",
+    "z","c","s",
+    "ü"
+];
+
+const wordExamples = [
+    ["mā","mẹ"],
+    ["má","cây gai"],
+    ["mǎ","ngựa"],
+    ["mà","mắng"],
+    ["nǐ","bạn"],
+    ["hǎo","tốt"],
+    ["xué","học"],
+    ["zhōng","trung"],
+    ["guó","quốc"],
+    ["qǐng","mời"],
+    ["chī","ăn"],
+    ["shì","là"],
+    ["rén","người"],
+    ["sān","ba"],
+    ["xǐhuan","thích"],
+    ["lǎoshī","giáo viên"],
+    ["xuéshēng","học sinh"],
+    ["Zhōngguó","Trung Quốc"]
+];
+
+let currentTarget = "mǎ";
+
 let recognition = null;
 
-// ==============================================
-// CHUẨN HÓA PINYIN
-// ==============================================
-function normalizePinyin(text) {
-  if (!text) return "";
-  return text.toLowerCase()
-    .replace(/[12345]/g, '')
-    .replace(/\s+/g, ' ')
-    .replace(/[.,!?;:'"]/g, '')
-    .trim();
+let recording = false;
+
+
+/* =====================================================
+   ĐIỀU HƯỚNG
+===================================================== */
+
+function showPage(id, button) {
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
+            page.classList.remove("active");
+        });
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+    document
+        .querySelectorAll(".nav button")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    if (id === "progress") {
+        updateProgress();
+    }
 }
 
-// ==============================================
-// TỰ BIẾN ÂM THANH ĐIỆU
-// ==============================================
-function applyToneSandwich(pinyinStr) {
-  const words = pinyinStr.split(' ').filter(w => w);
-  for (let i = 0; i < words.length - 1; i++) {
-    const t1 = words[i].match(/([12345])/)?.[1];
-    const t2 = words[i+1].match(/([12345])/)?.[1];
-    if (t1 === '3' && t2 === '3') words[i] = words[i].replace('3', '2');
-  }
-  return words.join(' ');
-}
 
-// ==============================================
-// PHÁT ÂM ĐỒNG BỘ TRÊN MỌI THIẾT BỊ
-// ==============================================
-function speakFromPinyin(pinyinText) {
-  return new Promise((resolve) => {
-    const adjusted = applyToneSandwich(pinyinText);
-    const ut = new SpeechSynthesisUtterance(adjusted);
-    ut.lang = 'zh-CN';
-    ut.volume = 1;
-    ut.rate = 0.85;
-    ut.pitch = 1;
+/* =====================================================
+   ÂM THANH TIẾNG TRUNG
+===================================================== */
 
-    const voices = window.speechSynthesis.getVoices();
-    const bestVoice = voices.find(v => 
-      v.lang === 'zh-CN' && (v.name.includes('Google') || v.name.includes('Standard'))
-    ) || voices.find(v => v.lang === 'zh-CN');
-    if (bestVoice) ut.voice = bestVoice;
+function speak(text) {
 
-    ut.onend = () => resolve();
+    if (!("speechSynthesis" in window)) {
+
+        alert(
+            "Trình duyệt không hỗ trợ phát âm. " +
+            "Hãy sử dụng Google Chrome hoặc Microsoft Edge."
+        );
+
+        return;
+    }
+
     window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(ut);
-  });
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "zh-CN";
+
+    utterance.rate = 0.75;
+
+    utterance.pitch = 1;
+
+    /*
+       Một số máy có nhiều voice.
+       Ưu tiên voice tiếng Trung.
+    */
+
+    const voices =
+        speechSynthesis.getVoices();
+
+    const chineseVoice =
+        voices.find(v =>
+            v.lang &&
+            (
+                v.lang.toLowerCase() === "zh-cn" ||
+                v.lang.toLowerCase() === "zh"
+            )
+        );
+
+    if (chineseVoice) {
+        utterance.voice = chineseVoice;
+    }
+
+    speechSynthesis.speak(utterance);
 }
 
-// ==============================================
-// BÁO ĐÚNG / SAI BẰNG ÂM THANH
-// ==============================================
-function playResultSound(type) {
-  const msg = type === 'correct' ? 'Đúng' : 'Sai';
-  const ut = new SpeechSynthesisUtterance(msg);
-  ut.lang = 'vi-VN';
-  ut.volume = 1;
-  ut.rate = 1.3;
-  ut.pitch = type === 'correct' ? 1.1 : 0.9;
-  window.speechSynthesis.speak(ut);
+
+/* =====================================================
+   BẢNG THANH MẪU
+===================================================== */
+
+function renderInitials(button) {
+
+    setActiveTab(button);
+
+    let html = `
+        <div class="grid">
+    `;
+
+    initials.forEach(sound => {
+
+        html += `
+            <div
+                class="pinyin-card"
+                onclick="speak('${sound}')">
+
+                <div class="big-pinyin">
+                    ${sound}
+                </div>
+
+                <div class="card-desc">
+                    Thanh mẫu
+                </div>
+
+                <button
+                    class="btn btn-light"
+                    onclick="
+                        event.stopPropagation();
+                        speak('${sound}')
+                    ">
+                    🔊 Nghe
+                </button>
+
+            </div>
+        `;
+
+    });
+
+    html += "</div>";
+
+    document.getElementById(
+        "pinyinTable"
+    ).innerHTML = html;
 }
 
-// ==============================================
-// KHỞI TẠO NHẬN DẠNG GIỌNG NÓI — NHANH NHẤT
-// ==============================================
-function initRecognition() {
-  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!window.SpeechRecognition) {
-    alert('⚠️ Dùng Chrome hoặc Edge để hỗ trợ đầy đủ chức năng');
-    return null;
-  }
-  const rec = new SpeechRecognition();
-  rec.lang = 'zh-CN';
-  rec.continuous = false;
-  rec.interimResults = false;
-  rec.maxAlternatives = 1;
-  return rec;
+
+/* =====================================================
+   BẢNG VẬN MẪU
+===================================================== */
+
+function renderFinals(button) {
+
+    setActiveTab(button);
+
+    let html = `
+        <div class="grid">
+    `;
+
+    finals.forEach(sound => {
+
+        html += `
+            <div
+                class="pinyin-card"
+                onclick="speak('${sound}')">
+
+                <div class="big-pinyin">
+                    ${sound}
+                </div>
+
+                <div class="card-desc">
+                    Vận mẫu
+                </div>
+
+                <button
+                    class="btn btn-light"
+                    onclick="
+                        event.stopPropagation();
+                        speak('${sound}')
+                    ">
+                    🔊 Nghe
+                </button>
+
+            </div>
+        `;
+
+    });
+
+    html += "</div>";
+
+    document.getElementById(
+        "pinyinTable"
+    ).innerHTML = html;
 }
 
-// ==============================================
-// SO SÁNH PHÁT ÂM — CHỈ DÙNG PINYIN LÀM CHUẨN
-// ==============================================
-function checkPronunciation(spokenText, targetPinyin) {
-  const normSpoken = normalizePinyin(spokenText);
-  const normTarget = normalizePinyin(targetPinyin);
-  return normSpoken === normTarget ||
-         normSpoken.includes(normTarget) ||
-         normTarget.includes(normSpoken);
+
+/* =====================================================
+   THANH ĐIỆU
+===================================================== */
+
+function renderTones(button) {
+
+    setActiveTab(button);
+
+    let html = `
+        <div class="grid">
+    `;
+
+    tones.forEach(item => {
+
+        html += `
+            <div
+                class="pinyin-card"
+                onclick="speak('${item[0]}')">
+
+                <div class="big-pinyin">
+                    ${item[0]}
+                </div>
+
+                <div class="card-title">
+                    ${item[1]}
+                </div>
+
+                <button
+                    class="btn btn-light"
+                    onclick="
+                        event.stopPropagation();
+                        speak('${item[0]}')
+                    ">
+                    🔊 Nghe
+                </button>
+
+            </div>
+        `;
+
+    });
+
+    html += "</div>";
+
+    document.getElementById(
+        "pinyinTable"
+    ).innerHTML = html;
 }
 
-// ==============================================
-// TẢI NỘI DUNG BÀI HỌC
-// ==============================================
-function loadLesson(index) {
-  const ls = lessons[index];
-  
-  document.getElementById('hanzi').textContent = ls.hanzi;
-  document.getElementById('pinyin').textContent = ls.pinyin;
-  document.getElementById('meaning').textContent = ls.meaning;
-  document.getElementById('result').style.display = 'none';
-  document.getElementById('status').textContent = `Bài ${index+1}/${lessons.length} — Sẵn sàng`;
 
-  // Chi tiết chữ viết
-  document.getElementById('charDetailArea').innerHTML = ls.characters.map(ch => `
-    <div class="char-detail">
-      <div class="char-box">
-        <div class="char-single">${ch.char}</div>
-        <div class="char-info">
-          <strong>Pinyin:</strong> ${ch.pinyin}<br>
-          <strong>Nghĩa:</strong> ${ch.meaning}<br>
-          <strong>Bộ thủ:</strong> ${ch.radical}<br>
-          <strong>Số nét:</strong> ${ch.strokes}
+/* =====================================================
+   BẢNG GHÉP PINYIN
+===================================================== */
+
+function renderCombination(button) {
+
+    setActiveTab(button);
+
+    const cols = [
+        "a",
+        "o",
+        "e",
+        "i",
+        "u",
+        "ü",
+        "ai",
+        "ei",
+        "ao",
+        "ou",
+        "an",
+        "en",
+        "ang",
+        "eng",
+        "ong"
+    ];
+
+    let html = `
+        <div class="table-scroll">
+
+        <table class="combo-table">
+
+        <tr>
+            <th>Thanh mẫu</th>
+    `;
+
+    cols.forEach(col => {
+
+        html += `
+            <th>${col}</th>
+        `;
+
+    });
+
+    html += "</tr>";
+
+
+    initials.forEach(initial => {
+
+        html += `
+            <tr>
+                <th>${initial}</th>
+        `;
+
+        cols.forEach(final => {
+
+            const combination =
+                initial + final;
+
+            html += `
+                <td
+                    onclick="speak('${combination}')">
+                    ${combination}
+                </td>
+            `;
+
+        });
+
+        html += "</tr>";
+
+    });
+
+    html += `
+        </table>
         </div>
-      </div>
-    </div>
-    <div class="stroke-box">
-      <div class="stroke-title">✍️ Thứ tự nét viết: ${ch.char}</div>
-      <div class="stroke-desc">${ch.strokeOrder}</div>
-    </div>
-  `).join('');
+    `;
 
-  // Từ vựng liên quan
-  document.getElementById('vocabArea').innerHTML = ls.relatedVocab.map(v => `
-    <li class="vocab-item">
-      <span class="vocab-hanzi">${v.hanzi}</span>
-      <span class="vocab-pinyin">${v.pinyin}</span>
-      <span class="vocab-meaning">${v.meaning}</span>
-    </li>
-  `).join('');
+    document.getElementById(
+        "pinyinTable"
+    ).innerHTML = html;
 }
 
-// ==============================================
-// CHẠY CHƯƠNG TRÌNH
-// ==============================================
-document.addEventListener('DOMContentLoaded', () => {
-  recognition = initRecognition();
-  if (!recognition) return;
 
-  loadLesson(currentIndex);
+function setActiveTab(button) {
 
-  // Nút Nghe
-  document.getElementById('btnListen').addEventListener('click', async () => {
-    document.getElementById('status').textContent = '🔊 Đang phát...';
-    await speakFromPinyin(lessons[currentIndex].pinyin);
-    document.getElementById('status').textContent = '✅ Đã phát xong';
-  });
+    document
+        .querySelectorAll("#table .tabs button")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
 
-  // Nút Nói — Bắt đầu NGAY không trễ
-  const btnSpeak = document.getElementById('btnSpeak');
-  btnSpeak.addEventListener('click', () => {
-    if (isRecording) return;
-    isRecording = true;
-    btnSpeak.disabled = true;
-    btnSpeak.textContent = '⏳ Đang nghe...';
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('status').textContent = '🎙 Nói ngay! Dừng là có kết quả';
-    recognition.start();
-  });
+    if (button) {
+        button.classList.add("active");
+    }
+}
 
-  // Kết quả — có ngay sau khi nói xong
-  recognition.onresult = (event) => {
-    const spoken = event.results[0][0].transcript;
-    const target = lessons[currentIndex].pinyin;
-    const ok = checkPronunciation(spoken, target);
 
-    const resEl = document.getElementById('result');
-    resEl.style.display = 'block';
-    resEl.className = 'result ' + (ok ? 'correct' : 'wrong');
-    resEl.textContent = ok ? '✅ ĐÚNG' : '❌ SAI';
+/* =====================================================
+   KHẨU HÌNH
+===================================================== */
 
-    playResultSound(ok ? 'correct' : 'wrong');
+function lesson(number, button) {
 
-    setTimeout(() => {
-      currentIndex = (currentIndex + 1) % lessons.length;
-      loadLesson(currentIndex);
-    }, 1500);
-  };
+    document
+        .querySelectorAll(".lesson")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
 
-  recognition.onend = () => {
-    isRecording = false;
-    btnSpeak.disabled = false;
-    btnSpeak.textContent = '🎙 Nói ngay';
-  };
+    document
+        .getElementById("lesson" + number)
+        .classList.add("active");
 
-  recognition.onerror = (e) => {
-    isRecording = false;
-    btnSpeak.disabled = false;
-    btnSpeak.textContent = '🎙 Nói ngay';
-    document.getElementById('status').textContent = '❌ Lỗi — Thử lại';
-  };
+    if (button) {
 
-  // Nút điều hướng
-  document.getElementById('btnPrev').addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + lessons.length) % lessons.length;
-    loadLesson(currentIndex);
-  });
-  document.getElementById('btnNext').addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % lessons.length;
-    loadLesson(currentIndex);
-  });
-});
+        document
+            .querySelectorAll("#mouth .tabs button")
+            .forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+        button.classList.add("active");
+    }
+}
+
+
+function openLesson(number) {
+
+    showPage("mouth");
+
+    lesson(number);
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =====================================================
+   NORMALIZE PINYIN
+===================================================== */
+
+function normalizePinyin(text) {
+
+    return text
+        .toLowerCase()
+        .replace(/[āáǎà]/g,"a")
+        .replace(/[ēéěè]/g,"e")
+        .replace(/[īíǐì]/g,"i")
+        .replace(/[ōóǒò]/g,"o")
+        .replace(/[ūúǔù]/g,"u")
+        .replace(/[ǖǘǚǜ]/g,"ü")
+        .replace(/v/g,"ü")
+        .replace(/[^a-zü]/g,"");
+}
+
+
+/* =====================================================
+   LẤY THANH ĐIỆU
+===================================================== */
+
+function getTone(text) {
+
+    if (!text) {
+        return 0;
+    }
+
+    if (/[āēīōūǖ]/.test(text)) {
+        return 1;
+    }
+
+    if (/[áéíóúǘ]/.test(text)) {
+        return 2;
+    }
+
+    if (/[ǎěǐǒǔǚ]/.test(text)) {
+        return 3;
+    }
+
+    if (/[àèìòùǜ]/.test(text)) {
+        return 4;
+    }
+
+    return 0;
+}
+
+
+/* =====================================================
+   TÁCH THANH MẪU + VẬN MẪU
+===================================================== */
+
+function parsePinyin(text) {
+
+    const normalized =
+        normalizePinyin(text);
+
+    let initial = "";
+
+    const possibleInitials = [
+        "zh",
+        "ch",
+        "sh",
+        "b",
+        "p",
+        "m",
+        "f",
+        "d",
+        "t",
+        "n",
+        "l",
+        "g",
+        "k",
+        "h",
+        "j",
+        "q",
+        "x",
+        "r",
+        "z",
+        "c",
+        "s"
+    ];
+
+    for (const item of possibleInitials) {
+
+        if (
+            normalized.startsWith(item)
+        ) {
+
+            initial = item;
+            break;
+
+        }
+
+    }
+
+    const final =
+        normalized.substring(
+            initial.length
+        );
+
+    return {
+        initial: initial,
+        final: final,
+        tone: getTone(text)
+    };
+}
+
+
+/* =====================================================
+   TẠO CÂU LUYỆN
+===================================================== */
+
+function newQuestion() {
+
+    const mode =
+        document.getElementById(
+            "practiceMode"
+        ).value;
+
+    let pool = [];
+
+    if (mode === "tone") {
+
+        pool = [
+            "mā",
+            "má",
+            "mǎ",
+            "mà",
+            "bā",
+            "bá",
+            "bǎ",
+            "bà"
+        ];
+
+    }
+
+    else if (mode === "hard") {
+
+        pool = [
+            "j",
+            "q",
+            "x",
+            "zh",
+            "ch",
+            "sh",
+            "r",
+            "z",
+            "c",
+            "s",
+            "ü"
+        ];
+
+    }
+
+    else if (mode === "word") {
+
+        pool =
+            wordExamples.map(
+                item => item[0]
+            );
+
+    }
+
+    else {
+
+        pool = [
+            "bā",
+            "pá",
+            "mǎ",
+            "fà",
+            "dā",
+            "tā",
+            "nǐ",
+            "lì",
+            "gāo",
+            "kè",
+            "hǎo",
+            "jī",
+            "qí",
+            "xī",
+            "zhī",
+            "chī",
+            "shī",
+            "rì",
+            "zǎi",
+            "cāi",
+            "sī",
+            "xué",
+            "yuè",
+            "lǜ"
+        ];
+
+    }
+
+    currentTarget =
+        pool[
+            Math.floor(
+                Math.random() *
+                pool.length
+            )
+        ];
+
+    document.getElementById(
+        "target"
+    ).textContent =
+        currentTarget;
+
+    const example =
+        wordExamples.find(
+            item =>
+                item[0] === currentTarget
+        );
+
+    document.getElementById(
+        "meaning"
+    ).textContent =
+        example
+            ? example[1]
+            : "";
+
+    resetScores();
+
+}
+
+
+/* =====================================================
+   RESET SCORE
+===================================================== */
+
+function resetScores() {
+
+    document.getElementById(
+        "initialScore"
+    ).textContent = "—";
+
+    document.getElementById(
+        "finalScore"
+    ).textContent = "—";
+
+    document.getElementById(
+        "toneScore"
+    ).textContent = "—";
+
+    document.getElementById(
+        "totalScore"
+    ).textContent = "—";
+
+    document.getElementById(
+        "feedback"
+    ).innerHTML =
+        "Bấm microphone rồi đọc đúng âm trên màn hình.";
+
+}
+
+
+/* =====================================================
+   MICROPHONE
+===================================================== */
+
+function toggleMicrophone() {
+
+    if (recording) {
+
+        if (recognition) {
+            recognition.stop();
+        }
+
+        return;
+    }
+
+    startRecognition();
+}
+
+
+function startRecognition() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        document.getElementById(
+            "status"
+        ).innerHTML = `
+            <span class="bad">
+            ❌ Trình duyệt không hỗ trợ Speech Recognition.
+            Hãy sử dụng Google Chrome hoặc Microsoft Edge.
+            </span>
+        `;
+
+        return;
+    }
+
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "zh-CN";
+
+    recognition.continuous = false;
+
+    recognition.interimResults = false;
+
+    recognition.maxAlternatives = 5;
+
+    recording = true;
+
+    document.getElementById(
+        "micButton"
+    ).classList.add("recording");
+
+    document.getElementById(
+        "status"
+    ).textContent =
+        "🎙️ Đang nghe... Hãy đọc: " +
+        currentTarget;
+
+
+    recognition.onresult =
+        function(event) {
+
+            const result =
+                event.results[0];
+
+            const transcript =
+                result[0].transcript;
+
+            scorePronunciation(
+                transcript
+            );
+
+        };
+
+
+    recognition.onerror =
+        function(event) {
+
+            document.getElementById(
+                "status"
+            ).textContent =
+                "Không nhận được giọng nói: " +
+                event.error;
+
+            stopRecording();
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            stopRecording();
+
+        };
+
+
+    try {
+
+        recognition.start();
+
+    }
+
+    catch(error) {
+
+        stopRecording();
+
+    }
+
+}
+
+
+function stopRecording() {
+
+    recording = false;
+
+    document.getElementById(
+        "micButton"
+    ).classList.remove(
+        "recording"
+    );
+
+}
+
+
+/* =====================================================
+   CHẤM ĐIỂM
+===================================================== */
+
+function scorePronunciation(heardText) {
+
+    const target =
+        parsePinyin(currentTarget);
+
+    const heard =
+        parsePinyin(heardText);
+
+
+    /*
+       ÂM ĐẦU
+    */
+
+    let initialScore = 0;
+
+    if (
+        target.initial ===
+        heard.initial
+    ) {
+
+        initialScore = 100;
+
+    }
+
+    else if (
+        heardText
+            .toLowerCase()
+            .includes(
+                target.initial
+            )
+    ) {
+
+        initialScore = 60;
+
+    }
+
+
+    /*
+       VẬN MẪU
+    */
+
+    let finalScore = 0;
+
+    if (
+        target.final ===
+        heard.final
+    ) {
+
+        finalScore = 100;
+
+    }
+
+    else if (
+        normalizePinyin(
+            heardText
+        ).includes(
+            target.final
+        )
+    ) {
+
+        finalScore = 60;
+
+    }
+
+
+    /*
+       THANH ĐIỆU
+    */
+
+    let toneScore = 0;
+
+    if (target.tone === 0) {
+
+        toneScore = 100;
+
+    }
+
+    else if (
+        target.tone ===
+        heard.tone
+    ) {
+
+        toneScore = 100;
+
+    }
+
+    else if (
+        Math.abs(
+            target.tone -
+            heard.tone
+        ) === 1
+    ) {
+
+        toneScore = 55;
+
+    }
+
+
+    /*
+       TỔNG
+
+       Âm đầu 30%
+       Vận mẫu 35%
+       Thanh điệu 35%
+    */
+
+    const total =
+        Math.round(
+            initialScore * 0.30 +
+            finalScore * 0.35 +
+            toneScore * 0.35
+        );
+
+
+    document.getElementById(
+        "initialScore"
+    ).textContent =
+        initialScore;
+
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        finalScore;
+
+
+    document.getElementById(
+        "toneScore"
+    ).textContent =
+        toneScore;
+
+
+    document.getElementById(
+        "totalScore"
+    ).textContent =
+        total;
+
+
+    let message = "";
+
+    if (total >= 90) {
+
+        message =
+            "🌟 Rất tốt! Phát âm gần với mục tiêu.";
+
+    }
+
+    else if (total >= 80) {
+
+        message =
+            "✅ Tốt! Hãy tiếp tục luyện để ổn định âm.";
+
+    }
+
+    else if (total >= 60) {
+
+        message =
+            "🟡 Khá nhưng vẫn cần luyện thêm.";
+
+    }
+
+    else {
+
+        message =
+            "🔴 Hãy nghe mẫu chậm rồi đọc lại.";
+
+    }
+
+
+    document.getElementById(
+        "feedback"
+    ).innerHTML = `
+
+        <b>Kết quả nhận diện:</b>
+        ${heardText}
+
+        <br>
+
+        <b>Pinyin mục tiêu:</b>
+        ${currentTarget}
+
+        <br><br>
+
+        ${message}
+
+    `;
+
+
+    document.getElementById(
+        "status"
+    ).textContent =
+        "Đã chấm xong. Bạn có thể đọc lại.";
+
+
+    saveScore(total);
+
+}
+
+
+/* =====================================================
+   LƯU ĐIỂM
+===================================================== */
+
+function saveScore(score) {
+
+    let scores =
+        JSON.parse(
+            localStorage.getItem(
+                "pinyin_scores"
+            ) || "[]"
+        );
+
+    scores.push(score);
+
+    if (scores.length > 100) {
+        scores.shift();
+    }
+
+    localStorage.setItem(
+        "pinyin_scores",
+        JSON.stringify(scores)
+    );
+
+}
+
+
+/* =====================================================
+   TIẾN ĐỘ
+===================================================== */
+
+function updateProgress() {
+
+    const scores =
+        JSON.parse(
+            localStorage.getItem(
+                "pinyin_scores"
+            ) || "[]"
+        );
+
+
+    const attempts =
+        scores.length;
+
+
+    const average =
+        attempts
+            ? Math.round(
+                scores.reduce(
+                    (a,b) => a + b,
+                    0
+                ) / attempts
+            )
+            : 0;
+
+
+    const best =
+        attempts
+            ? Math.max(...scores)
+            : 0;
+
+
+    document.getElementById(
+        "attempts"
+    ).textContent =
+        attempts;
+
+
+    document.getElementById(
+        "average"
+    ).textContent =
+        average;
+
+
+    document.getElementById(
+        "best"
+    ).textContent =
+        best;
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        average + "%";
+
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        `Bạn đã luyện ${attempts} lần. ` +
+        `Mục tiêu hiện tại: 80/100.`;
+
+}
+
+
+function resetProgress() {
+
+    if (
+        confirm(
+            "Bạn có chắc muốn xóa toàn bộ tiến độ?"
+        )
+    ) {
+
+        localStorage.removeItem(
+            "pinyin_scores"
+        );
+
+        updateProgress();
+
+    }
+
+}
+
+
+/* =====================================================
+   KHỞI TẠO
+===================================================== */
+
+renderInitials(
+    document.querySelector(
+        "#table .tabs button"
+    )
+);
+
+newQuestion();
+
+updateProgress();
+
 </script>
+
 </body>
 </html>
