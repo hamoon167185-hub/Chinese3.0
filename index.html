@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Học Tiếng Trung — Hoàn Chỉnh</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
+  body {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #eef2f7, #d9e2ec);
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    color: #2d3748;
+    margin: 20px 0 30px;
+    font-size: 26px;
+  }
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+  .hanzi-main {
+    font-size: 72px;
+    text-align: center;
+    color: #c53030;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  .pinyin-main {
+    font-size: 30px;
+    text-align: center;
+    color: #2b6cb0;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .meaning-main {
+    font-size: 20px;
+    text-align: center;
+    color: #4a5568;
+    margin-bottom: 25px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2d3748;
+    margin: 20px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .char-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  .char-box {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 15px;
+    background: #f7fafc;
+    border-radius: 12px;
+  }
+  .char-single {
+    font-size: 36px;
+    color: #c53030;
+    margin-bottom: 8px;
+  }
+  .char-info {
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.7;
+  }
+  .stroke-box {
+    background: #fef5e7;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 10px 0;
+  }
+  .stroke-title {
+    font-weight: 600;
+    color: #b45309;
+    margin-bottom: 8px;
+  }
+  .stroke-desc {
+    color: #78350f;
+    line-height: 1.8;
+  }
+  .vocab-list {
+    list-style: none;
+    margin-top: 10px;
+  }
+  .vocab-item {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .vocab-hanzi {
+    font-size: 24px;
+    color: #c53030;
+    min-width: 60px;
+  }
+  .vocab-pinyin {
+    color: #2b6cb0;
+    font-size: 15px;
+    min-width: 100px;
+  }
+  .vocab-meaning {
+    color: #4a5568;
+    font-size: 15px;
+    flex: 1;
+  }
+  .btn-wrap {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  button {
+    padding: 14px 28px;
+    font-size: 17px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-weight: 600;
+  }
+  .btn-listen { background: #3182ce; color: white; }
+  .btn-listen:hover { background: #2b6cb0; transform: translateY(-2px); }
+  .btn-speak { background: #38a169; color: white; }
+  .btn-speak:hover { background: #2f855a; transform: translateY(-2px); }
+  .btn-speak:disabled { background: #cbd5e0; cursor: not-allowed; transform: none; }
+  .status { text-align: center; margin-top: 10px; color: #718096; font-size: 15px; }
+  .result {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    display: none;
+    animation: pop 0.3s ease;
+  }
+  .result.correct { background: #f0fff4; color: #22543d; display: block; }
+  .result.wrong { background: #fed7d7; color: #742a2a; display: block; }
+  @keyframes pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  .nav button {
+    background: #e2e8f0;
+    color: #2d3748;
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+  .nav button:hover { background: #cbd5e0; }
+</style>
+</head>
+<body>
+
+<h1>🎓 Học Tiếng Trung — Toàn Diện</h1>
+
+<!-- === THÔNG TIN CHÍNH === -->
+<div class="card">
+  <div class="hanzi-main" id="hanzi">你好</div>
+  <div class="pinyin-main" id="pinyin">nǐ hǎo</div>
+  <div class="meaning-main" id="meaning">Xin chào</div>
+
+  <div class="btn-wrap">
+    <button class="btn-listen" id="btnListen">🔊 Nghe chuẩn</button>
+    <button class="btn-speak" id="btnSpeak">🎙 Nói ngay</button>
+  </div>
+
+  <div class="status" id="status">Sẵn sàng — Nhấn "Nói ngay" để bắt đầu</div>
+  <div class="result" id="result"></div>
+</div>
+
+<!-- === CHI TIẾT CHỮ VIẾT === -->
+<div class="card">
+  <div class="section-title">✍️ Chi tiết chữ viết</div>
+  <div id="charDetailArea"></div>
+</div>
+
+<!-- === TỪ VỰNG LIÊN QUAN === -->
+<div class="card">
+  <div class="section-title">📚 Từ vựng liên quan</div>
+  <ul class="vocab-list" id="vocabArea"></ul>
+</div>
+
+<!-- === ĐIỀU HƯỚNG === -->
+<div class="nav">
+  <button id="btnPrev">← Bài trước</button>
+  <button id="btnNext">Bài sau →</button>
+</div>
+
+<script>
+// ==============================================
+// DỮ LIỆU BÀI HỌC — THÊM BÀI MỚI Ở ĐÂY
+// ==============================================
+const lessons = [
+  {
+    hanzi: "你好",
+    pinyin: "ni3 hao3",
+    meaning: "Xin chào",
+    characters: [
+      { char: "你", pinyin: "ni3", meaning: "Bạn", strokes: 7, radical: "Nhân 亻", strokeOrder: "1.Ngang 2.Đứng 3.Ngang 4.Nét xiên phải 5.Ngang 6.Nét cong 7.Nét móc" },
+      { char: "好", pinyin: "hao3", meaning: "Tốt/Được", strokes: 6, radical: "Nữ 女", strokeOrder: "Nữ: 1.Ngang 2.Nét xiên 3.Ngang → Tử: 1.Nét cong 2.Nét móc 3.Ngang" }
+    ],
+    relatedVocab: [
+      { hanzi: "你们", pinyin: "ni3 men5", meaning: "Các bạn" },
+      { hanzi: "好人", pinyin: "hao3 ren2", meaning: "Người tốt" },
+      { hanzi: "很好", pinyin: "hen3 hao3", meaning: "Rất tốt" }
+    ]
+  },
+  {
+    hanzi: "谢谢",
+    pinyin: "xie4 xie",
+    meaning: "Cảm ơn",
+    characters: [
+      { char: "谢", pinyin: "xie4", meaning: "Cảm ơn", strokes: 12, radical: "Ngôn 讠", strokeOrder: "Trái: Ngôn 2 nét → Phải: Thân 10 nét" }
+    ],
+    relatedVocab: [
+      { hanzi: "感谢", pinyin: "gan3 xie4", meaning: "Cảm tạ" },
+      { hanzi: "多谢", pinyin: "duo1 xie4", meaning: "Cảm ơn nhiều" },
+      { hanzi: "谢谢了", pinyin: "xie4 xie le", meaning: "Cảm ơn nhé" }
+    ]
+  },
+  {
+    hanzi: "再见",
+    pinyin: "zai4 jian4",
+    meaning: "Tạm biệt",
+    characters: [
+      { char: "再", pinyin: "zai4", meaning: "Lại/Tiếp tục", strokes: 6, radical: "Mãi 冂", strokeOrder: "1.Ngang 2.Nét xiên 3.Nét cong 4.Ngang 5.Nét cong 6.Ngang" },
+      { char: "见", pinyin: "jian4", meaning: "Thấy/Gặp", strokes: 4, radical: "Kiến 见", strokeOrder: "1.Nét đứng 2.Nét cong 3.Ngang 4.Nét móc cong" }
+    ],
+    relatedVocab: [
+      { hanzi: "明天见", pinyin: "ming2 tian1 jian4", meaning: "Hẹn gặp mai" },
+      { hanzi: "下次见", pinyin: "xia4 ci4 jian4", meaning: "Hẹn gặp lần sau" },
+      { hanzi: "再见了", pinyin: "zai4 jian4 le", meaning: "Tạm biệt nhé" }
+    ]
+  },
+  {
+    hanzi: "学习",
+    pinyin: "xue2 xi2",
+    meaning: "Học tập",
+    characters: [
+      { char: "学", pinyin: "xue2", meaning: "Học", strokes: 8, radical: "Tử 子", strokeOrder: "Phần trên 5 nét → Tử: 3 nét" },
+      { char: "习", pinyin: "xi2", meaning: "Luyện tập", strokes: 3, radical: "Vũ 羽", strokeOrder: "1.Nét xiên 2.Nét cong 3.Nét móc" }
+    ],
+    relatedVocab: [
+      { hanzi: "学生", pinyin: "xue2 sheng1", meaning: "Học sinh" },
+      { hanzi: "学校", pinyin: "xue2 xiao4", meaning: "Trường học" },
+      { hanzi: "练习", pinyin: "lian4 xi2", meaning: "Luyện tập" }
+    ]
+  }
+];
+
+let currentIndex = 0;
+let isRecording = false;
+let recognition = null;
+
+// ==============================================
+// CHUẨN HÓA PINYIN
+// ==============================================
+function normalizePinyin(text) {
+  if (!text) return "";
+  return text.toLowerCase()
+    .replace(/[12345]/g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/[.,!?;:'"]/g, '')
+    .trim();
+}
+
+// ==============================================
+// TỰ BIẾN ÂM THANH ĐIỆU
+// ==============================================
+function applyToneSandwich(pinyinStr) {
+  const words = pinyinStr.split(' ').filter(w => w);
+  for (let i = 0; i < words.length - 1; i++) {
+    const t1 = words[i].match(/([12345])/)?.[1];
+    const t2 = words[i+1].match(/([12345])/)?.[1];
+    if (t1 === '3' && t2 === '3') words[i] = words[i].replace('3', '2');
+  }
+  return words.join(' ');
+}
+
+// ==============================================
+// PHÁT ÂM ĐỒNG BỘ TRÊN MỌI THIẾT BỊ
+// ==============================================
+function speakFromPinyin(pinyinText) {
+  return new Promise((resolve) => {
+    const adjusted = applyToneSandwich(pinyinText);
+    const ut = new SpeechSynthesisUtterance(adjusted);
+    ut.lang = 'zh-CN';
+    ut.volume = 1;
+    ut.rate = 0.85;
+    ut.pitch = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const bestVoice = voices.find(v => 
+      v.lang === 'zh-CN' && (v.name.includes('Google') || v.name.includes('Standard'))
+    ) || voices.find(v => v.lang === 'zh-CN');
+    if (bestVoice) ut.voice = bestVoice;
+
+    ut.onend = () => resolve();
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(ut);
+  });
+}
+
+// ==============================================
+// BÁO ĐÚNG / SAI BẰNG ÂM THANH
+// ==============================================
+function playResultSound(type) {
+  const msg = type === 'correct' ? 'Đúng' : 'Sai';
+  const ut = new SpeechSynthesisUtterance(msg);
+  ut.lang = 'vi-VN';
+  ut.volume = 1;
+  ut.rate = 1.3;
+  ut.pitch = type === 'correct' ? 1.1 : 0.9;
+  window.speechSynthesis.speak(ut);
+}
+
+// ==============================================
+// KHỞI TẠO NHẬN DẠNG GIỌNG NÓI — NHANH NHẤT
+// ==============================================
+function initRecognition() {
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!window.SpeechRecognition) {
+    alert('⚠️ Dùng Chrome hoặc Edge để hỗ trợ đầy đủ chức năng');
+    return null;
+  }
+  const rec = new SpeechRecognition();
+  rec.lang = 'zh-CN';
+  rec.continuous = false;
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  return rec;
+}
+
+// ==============================================
+// SO SÁNH PHÁT ÂM — CHỈ DÙNG PINYIN LÀM CHUẨN
+// ==============================================
+function checkPronunciation(spokenText, targetPinyin) {
+  const normSpoken = normalizePinyin(spokenText);
+  const normTarget = normalizePinyin(targetPinyin);
+  return normSpoken === normTarget ||
+         normSpoken.includes(normTarget) ||
+         normTarget.includes(normSpoken);
+}
+
+// ==============================================
+// TẢI NỘI DUNG BÀI HỌC
+// ==============================================
+function loadLesson(index) {
+  const ls = lessons[index];
+  
+  document.getElementById('hanzi').textContent = ls.hanzi;
+  document.getElementById('pinyin').textContent = ls.pinyin;
+  document.getElementById('meaning').textContent = ls.meaning;
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('status').textContent = `Bài ${index+1}/${lessons.length} — Sẵn sàng`;
+
+  // Chi tiết chữ viết
+  document.getElementById('charDetailArea').innerHTML = ls.characters.map(ch => `
+    <div class="char-detail">
+      <div class="char-box">
+        <div class="char-single">${ch.char}</div>
+        <div class="char-info">
+          <strong>Pinyin:</strong> ${ch.pinyin}<br>
+          <strong>Nghĩa:</strong> ${ch.meaning}<br>
+          <strong>Bộ thủ:</strong> ${ch.radical}<br>
+          <strong>Số nét:</strong> ${ch.strokes}
+        </div>
+      </div>
+    </div>
+    <div class="stroke-box">
+      <div class="stroke-title">✍️ Thứ tự nét viết: ${ch.char}</div>
+      <div class="stroke-desc">${ch.strokeOrder}</div>
+    </div>
+  `).join('');
+
+  // Từ vựng liên quan
+  document.getElementById('vocabArea').innerHTML = ls.relatedVocab.map(v => `
+    <li class="vocab-item">
+      <span class="vocab-hanzi">${v.hanzi}</span>
+      <span class="vocab-pinyin">${v.pinyin}</span>
+      <span class="vocab-meaning">${v.meaning}</span>
+    </li>
+  `).join('');
+}
+
+// ==============================================
+// CHẠY CHƯƠNG TRÌNH
+// ==============================================
+document.addEventListener('DOMContentLoaded', () => {
+  recognition = initRecognition();
+  if (!recognition) return;
+
+  loadLesson(currentIndex);
+
+  // Nút Nghe
+  document.getElementById('btnListen').addEventListener('click', async () => {
+    document.getElementById('status').textContent = '🔊 Đang phát...';
+    await speakFromPinyin(lessons[currentIndex].pinyin);
+    document.getElementById('status').textContent = '✅ Đã phát xong';
+  });
+
+  // Nút Nói — Bắt đầu NGAY không trễ
+  const btnSpeak = document.getElementById('btnSpeak');
+  btnSpeak.addEventListener('click', () => {
+    if (isRecording) return;
+    isRecording = true;
+    btnSpeak.disabled = true;
+    btnSpeak.textContent = '⏳ Đang nghe...';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('status').textContent = '🎙 Nói ngay! Dừng là có kết quả';
+    recognition.start();
+  });
+
+  // Kết quả — có ngay sau khi nói xong
+  recognition.onresult = (event) => {
+    const spoken = event.results[0][0].transcript;
+    const target = lessons[currentIndex].pinyin;
+    const ok = checkPronunciation(spoken, target);
+
+    const resEl = document.getElementById('result');
+    resEl.style.display = 'block';
+    resEl.className = 'result ' + (ok ? 'correct' : 'wrong');
+    resEl.textContent = ok ? '✅ ĐÚNG' : '❌ SAI';
+
+    playResultSound(ok ? 'correct' : 'wrong');
+
+    setTimeout(() => {
+      currentIndex = (currentIndex + 1) % lessons.length;
+      loadLesson(currentIndex);
+    }, 1500);
+  };
+
+  recognition.onend = () => {
+    isRecording = false;
+    btnSpeak.disabled = false;
+    btnSpeak.textContent = '🎙 Nói ngay';
+  };
+
+  recognition.onerror = (e) => {
+    isRecording = false;
+    btnSpeak.disabled = false;
+    btnSpeak.textContent = '🎙 Nói ngay';
+    document.getElementById('status').textContent = '❌ Lỗi — Thử lại';
+  };
+
+  // Nút điều hướng
+  document.getElementById('btnPrev').addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + lessons.length) % lessons.length;
+    loadLesson(currentIndex);
+  });
+  document.getElementById('btnNext').addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % lessons.length;
+    loadLesson(currentIndex);
+  });
+});
+</script>
+</body>
+</html>
